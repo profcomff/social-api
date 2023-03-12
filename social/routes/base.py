@@ -3,13 +3,24 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi_sqlalchemy import DBSessionMiddleware
 
 from social.settings import get_settings
+from social import __version__
 
 from .github import router as github_rourer
 from .telegram import router as telegram_rourer
 
 
 settings = get_settings()
-app = FastAPI()
+app = FastAPI(
+    title='Сервис мониторинга активности',
+    description=(
+        'Серверная часть сервиса для выдачи печенек за активности'
+    ),
+    version=__version__,
+
+    # Отключаем нелокальную документацию
+    docs_url=None if __version__ != 'dev' else '/docs',
+    redoc_url=None,
+)
 
 app.add_middleware(
     DBSessionMiddleware,
