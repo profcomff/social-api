@@ -1,0 +1,11 @@
+fastapi
+fastapi-sqlalchemy
+psycopg2-binary
+pydantic[dotenv]
+uvicorn
+alembic
+SQLAlchemy
+gunicorn
+logging-profcomff
+auth-lib-profcomff[fastapi]
+python-telegram-bot
