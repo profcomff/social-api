@@ -58,7 +58,7 @@ jobs:
       name: Testing
       url: https://api.test.profcomff.com/social
     env:
-      CONTAITER_NAME: com_profcomff_api_social_test
+      CONTAINER_NAME: com_profcomff_api_social_test
     permissions:
       packages: read
 
@@ -72,7 +72,7 @@ jobs:
             --rm \
             --network=web \
             --env DB_DSN=${{ secrets.DB_DSN }} \
-            --name ${{ env.CONTAITER_NAME }}_migration \
+            --name ${{ env.CONTAINER_NAME }}_migration \
             --workdir="/" \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test \
             alembic upgrade head
@@ -80,7 +80,7 @@ jobs:
       - name: Run new version
         id: run_test
         run: |
-          docker stop ${{ env.CONTAITER_NAME }} || true && docker rm ${{ env.CONTAITER_NAME }} || true
+          docker stop ${{ env.CONTAINER_NAME }} || true && docker rm ${{ env.CONTAINER_NAME }} || true
           docker run \
             --detach \
             --restart on-failure:3 \
@@ -88,7 +88,7 @@ jobs:
             --env DB_DSN='${{ secrets.DB_DSN }}' \
             --env TELEGRAM_BOT_TOKEN='${{ secrets.TELEGRAM_BOT_TOKEN }}' \
             --env GUNICORN_CMD_ARGS='--log-config logging_test.conf' \
-            --name ${{ env.CONTAITER_NAME }} \
+            --name ${{ env.CONTAINER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test
 
   deploy-production:
@@ -100,7 +100,7 @@ jobs:
       name: Production
       url: https://api.profcomff.com/social
     env:
-      CONTAITER_NAME: com_profcomff_api_social
+      CONTAINER_NAME: com_profcomff_api_social
     permissions:
       packages: read
 
@@ -114,7 +114,7 @@ jobs:
             --rm \
             --network=web \
             --env DB_DSN=${{ secrets.DB_DSN }} \
-            --name ${{ env.CONTAITER_NAME }}_migration \
+            --name ${{ env.CONTAINER_NAME }}_migration \
             --workdir="/" \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
             alembic upgrade head
@@ -122,7 +122,7 @@ jobs:
       - name: Run new version
         id: run_test
         run: |
-          docker stop ${{ env.CONTAITER_NAME }} || true && docker rm ${{ env.CONTAITER_NAME }} || true
+          docker stop ${{ env.CONTAINER_NAME }} || true && docker rm ${{ env.CONTAINER_NAME }} || true
           docker run \
             --detach \
             --restart always \
@@ -130,5 +130,5 @@ jobs:
             --env DB_DSN='${{ secrets.DB_DSN }}' \
             --env TELEGRAM_BOT_TOKEN='${{ secrets.TELEGRAM_BOT_TOKEN }}' \
             --env GUNICORN_CMD_ARGS='--log-config logging_prod.conf' \
-            --name ${{ env.CONTAITER_NAME }} \
+            --name ${{ env.CONTAINER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
