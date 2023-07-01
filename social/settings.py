@@ -7,8 +7,8 @@ from functools import lru_cache
 class Settings(BaseSettings):
     """Application settings"""
 
-    DB_DSN: PostgresDsn
-    ROOT_PATH: str = '/' + os.getenv("APP_NAME")
+    DB_DSN: PostgresDsn = 'postgresql://postgres@localhost:5432/postgres'
+    ROOT_PATH: str = '/' + os.getenv('APP_NAME', '')
 
     CORS_ALLOW_ORIGINS: list[str] = ['*']
     CORS_ALLOW_CREDENTIALS: bool = True
