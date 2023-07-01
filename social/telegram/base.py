@@ -46,5 +46,6 @@ class CustomContext(CallbackContext[ExtBot, dict, dict, dict]):
 def get_application():
     context_types = ContextTypes(context=CustomContext)
     app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).updater(None).context_types(context_types).build()
+    logger.info("Telegram API initialized successfully")
     register_handlers(app)
     return app

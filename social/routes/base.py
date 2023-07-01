@@ -4,6 +4,7 @@ from fastapi_sqlalchemy import DBSessionMiddleware
 
 from social.settings import get_settings
 from social import __version__
+from social.telegram import get_application as get_telegram
 
 from .github import router as github_rourer
 from .telegram import router as telegram_rourer
@@ -22,6 +23,8 @@ app = FastAPI(
     docs_url=None if __version__ != 'dev' else '/docs',
     redoc_url=None,
 )
+telegram = get_telegram()
+
 
 app.add_middleware(
     DBSessionMiddleware,
@@ -36,6 +39,19 @@ app.add_middleware(
     allow_methods=settings.CORS_ALLOW_METHODS,
     allow_headers=settings.CORS_ALLOW_HEADERS,
 )
+
+
+@app.on_event("startup")
+async def startup():
+    await telegram.initialize()
+    await telegram.start()
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    await telegram.stop()
+    await telegram.shutdown()
+
 
 app.include_router(github_rourer)
 app.include_router(telegram_rourer)
