@@ -10,7 +10,6 @@ from random import choice
 from telegram import Update
 from telegram.ext import (
     Application,
-    ChatJoinRequestHandler,
     MessageHandler,
     ContextTypes,
 )
@@ -25,30 +24,31 @@ settings = get_settings()
 CHAT_ID = -1001758480664
 MAIN_TOPIC_ID = 55106
 
+GREETINGS = [
+    """
+    Привет, [{name}](tg://user?id={id}), и добро пожаловать в наш клуб!
+
+    Расскажи, что привело тебя к нам и откуда о нас узнал?
+    """
+]
 
 def register_handlers(app: Application):
-    app.add_handler(ChatJoinRequestHandler(chat_join, CHAT_ID))
     app.add_handler(MessageHandler(Chat(CHAT_ID), delete_system_message))
     logger.info("Viribus Unitis handlers activated")
 
 
-async def chat_join(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    questions = [
-        """Привет и добро пожаловать в наш клуб!
-
-        Расскажи, что привело тебя к нам и откуда о нас узнал?
-        """
-    ]
-    context.bot.send_message(
-        chat_id=CHAT_ID,
-        message_thread_id=MAIN_TOPIC_ID,
-        text=dedent(choice(questions)),
-    )
-    logger.info(f"User {update.message.from_user.username} greeting sent")
-    await update.message.delete()
-
-
 async def delete_system_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    for user in update.message.new_chat_members:
+        await context.bot.send_message(
+            chat_id=CHAT_ID,
+            message_thread_id=MAIN_TOPIC_ID,
+            text=dedent(choice(GREETINGS)).format(
+                name=user.name, id=user.id
+            ),
+            parse_mode='markdown',
+        )
+        logger.info(f"User {user.name} greeting sent")
+
     if update.message.message_thread_id is None:
         logger.info(f"Message from general channel handled")
         await update.message.delete()
