@@ -2,18 +2,15 @@ from dataclasses import dataclass
 import logging
 from functools import lru_cache
 
-from telegram import Update
-from telegram.constants import ParseMode
 from telegram.ext import (
     Application,
     CallbackContext,
-    CommandHandler,
     ContextTypes,
     ExtBot,
-    TypeHandler,
 )
 
 from social.settings import get_settings
+from .handlers_viribus import register_handlers
 
 
 logger = logging.getLogger(__name__)
@@ -49,4 +46,5 @@ class CustomContext(CallbackContext[ExtBot, dict, dict, dict]):
 def get_application():
     context_types = ContextTypes(context=CustomContext)
     app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).updater(None).context_types(context_types).build()
+    register_handlers(app)
     return app
