@@ -49,6 +49,6 @@ async def delete_system_message(update: Update, context: ContextTypes.DEFAULT_TY
         )
         logger.info(f"User {user.name} greeting sent")
 
-    if update.message.message_thread_id is None:
-        logger.info(f"Message from general channel handled")
-        await update.message.delete()
+    if update.message.message_thread_id is None and not update.effective_user.is_bot:
+        res = await update.message.delete()
+        logger.info(f"Non-bot message to general channel handled, delete status = {res}")
