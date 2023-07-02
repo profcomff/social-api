@@ -29,7 +29,3 @@ class CustomContext(CallbackContext[ExtBot, dict, dict, dict]):
         if isinstance(update, WebhookUpdate):
             return cls(application=application, user_id=update.user_id)
         return super().from_update(update, application)
-
-
-def clear_command(msg):
-    return re.sub(r"/\w+(@\w+)?", "", msg, 1, re.IGNORECASE | re.DOTALL).strip()

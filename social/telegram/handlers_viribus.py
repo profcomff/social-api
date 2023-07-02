@@ -19,7 +19,7 @@ from telegram.ext.filters import (
 )
 
 from social.settings import get_settings
-from social.telegram.utils import CustomContext, clear_command
+from social.telegram.utils import CustomContext
 
 
 logger = logging.getLogger(__name__)
@@ -62,7 +62,8 @@ async def delete_system_message(update: Update, context: CustomContext):
 
 async def change_slug(update: Update, context: CustomContext):
     """Если пользователь является администратором, то он может поменять надпись у имени"""
-    slug = clear_command(update.effective_message.text)
+    logger.info(f'Trying to change slug via command {update.effective_message.text}')
+    slug = ' '.join(context.args) if context.args else ''
     if len(slug) == 0:
         await context.bot.send_message(
             chat_id=update.effective_message.chat.id,
@@ -82,7 +83,7 @@ async def change_slug(update: Update, context: CustomContext):
             text="Статус должен быть не больше 16 символов",
         )
         return
-    if set(slug) - set(' ' + digits + ascii_letters + punctuation):
+    if len(set(slug) - set(' ' + digits + ascii_letters + punctuation)) != 0:
         await context.bot.send_message(
             chat_id=update.effective_message.chat.id,
             reply_to_message_id=update.effective_message.id,
