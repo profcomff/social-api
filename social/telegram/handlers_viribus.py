@@ -9,6 +9,7 @@ from textwrap import dedent
 from random import choice
 
 from telegram import Update
+from telegram.error import TelegramError
 from telegram.ext import (
     Application,
     MessageHandler,
@@ -83,7 +84,7 @@ async def change_slug(update: Update, context: CustomContext):
             text="Статус должен быть не больше 16 символов",
         )
         return
-    if len(set(slug) - set(' ' + digits + ascii_letters + punctuation)) != 0:
+    if len(set(slug.lower) - set(digits + ascii_letters + punctuation + 'абвгдеёжзиклмнопрстуфхцчшщъыьэюя ')) != 0:
         await context.bot.send_message(
             chat_id=update.effective_message.chat.id,
             reply_to_message_id=update.effective_message.id,
@@ -97,8 +98,14 @@ async def change_slug(update: Update, context: CustomContext):
             text="Только администраторы могут иметь поясняющий текст",
         )
         return
-    res = await context.bot.set_chat_administrator_custom_title(CHAT_ID, update.effective_user, slug)
+
+    try:
+        res = await context.bot.set_chat_administrator_custom_title(CHAT_ID, update.effective_user, slug)
+    except TelegramError as e:
+        logger.error(e, exc_info=True)
+        res = False
     if not res:
+        logger.info('Can not change value', exc_info=True)
         await context.bot.send_message(
             chat_id=update.effective_message.chat.id,
             reply_to_message_id=update.effective_message.id,
