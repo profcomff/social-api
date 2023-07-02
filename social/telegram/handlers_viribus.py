@@ -84,7 +84,7 @@ async def change_slug(update: Update, context: CustomContext):
             text="Статус должен быть не больше 16 символов",
         )
         return
-    if len(set(slug.lower) - set(digits + ascii_letters + punctuation + 'абвгдеёжзиклмнопрстуфхцчшщъыьэюя ')) != 0:
+    if len(set(slug.lower()) - set(digits + ascii_letters + punctuation + 'абвгдеёжзиклмнопрстуфхцчшщъыьэюя ')) != 0:
         await context.bot.send_message(
             chat_id=update.effective_message.chat.id,
             reply_to_message_id=update.effective_message.id,
@@ -100,7 +100,7 @@ async def change_slug(update: Update, context: CustomContext):
         return
 
     try:
-        res = await context.bot.set_chat_administrator_custom_title(CHAT_ID, update.effective_user, slug)
+        res = await context.bot.set_chat_administrator_custom_title(CHAT_ID, update.effective_user.id, slug)
     except TelegramError as e:
         logger.error(e, exc_info=True)
         res = False
