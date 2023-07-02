@@ -1,45 +1,22 @@
-from dataclasses import dataclass
 import logging
 from functools import lru_cache
+from textwrap import dedent
 
+from telegram import Update
 from telegram.ext import (
     Application,
-    CallbackContext,
     ContextTypes,
-    ExtBot,
+    CommandHandler,
 )
 
 from social.settings import get_settings
+
 from .handlers_viribus import register_handlers
+from .utils import CustomContext
 
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
-
-
-@dataclass
-class WebhookUpdate:
-    """Simple dataclass to wrap a custom update type"""
-
-    user_id: int
-    payload: str
-
-
-class CustomContext(CallbackContext[ExtBot, dict, dict, dict]):
-    """
-    Custom CallbackContext class that makes `user_data` available for updates of type
-    `WebhookUpdate`.
-    """
-
-    @classmethod
-    def from_update(
-        cls,
-        update: object,
-        application: "Application",
-    ) -> "CustomContext":
-        if isinstance(update, WebhookUpdate):
-            return cls(application=application, user_id=update.user_id)
-        return super().from_update(update, application)
 
 
 @lru_cache()
@@ -48,4 +25,17 @@ def get_application():
     app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).updater(None).context_types(context_types).build()
     logger.info("Telegram API initialized successfully")
     register_handlers(app)
+    app.add_handler(CommandHandler(callback=send_help, command="help"))
     return app
+
+
+async def send_help(update: Update, context: CustomContext):
+    await context.bot.send_message(
+        chat_id=update.effective_message.chat.id,
+        reply_to_message_id=update.effective_message.id,
+        text=dedent("""
+            Привет, я ответственный за печеньки!
+            Моя основная цель – помогать различным комьюнити расти
+        """),
+        parse_mode='markdown',
+    )
