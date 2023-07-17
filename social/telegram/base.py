@@ -33,9 +33,11 @@ async def send_help(update: Update, context: CustomContext):
     await context.bot.send_message(
         chat_id=update.effective_message.chat.id,
         reply_to_message_id=update.effective_message.id,
-        text=dedent("""
+        text=dedent(
+            """
             Привет, я ответственный за печеньки!
             Моя основная цель – помогать различным комьюнити расти
-        """),
+        """
+        ),
         parse_mode='markdown',
     )

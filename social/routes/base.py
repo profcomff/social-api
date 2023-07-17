@@ -13,11 +13,8 @@ from .telegram import router as telegram_rourer
 settings = get_settings()
 app = FastAPI(
     title='Сервис мониторинга активности',
-    description=(
-        'Серверная часть сервиса для выдачи печенек за активности'
-    ),
+    description=('Серверная часть сервиса для выдачи печенек за активности'),
     version=__version__,
-
     # Настраиваем интернет документацию
     root_path=settings.ROOT_PATH if __version__ != 'dev' else '/',
     docs_url=None if __version__ != 'dev' else '/docs',
@@ -28,7 +25,7 @@ telegram = get_telegram()
 
 app.add_middleware(
     DBSessionMiddleware,
-    db_url=settings.DB_DSN,
+    db_url=str(settings.DB_DSN),
     engine_args={"pool_pre_ping": True, "isolation_level": "AUTOCOMMIT"},
 )
 

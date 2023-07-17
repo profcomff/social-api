@@ -1,11 +1,14 @@
 import os
 
-from pydantic import BaseSettings, PostgresDsn
+from pydantic import ConfigDict, PostgresDsn
+from pydantic_settings import BaseSettings
 from functools import lru_cache
 
 
 class Settings(BaseSettings):
     """Application settings"""
+
+    model_config = ConfigDict(case_sensitive=True, env_file=".env", extra="allow")
 
     DB_DSN: PostgresDsn = 'postgresql://postgres@localhost:5432/postgres'
     ROOT_PATH: str = '/' + os.getenv('APP_NAME', '')
@@ -15,13 +18,7 @@ class Settings(BaseSettings):
     CORS_ALLOW_METHODS: list[str] = ['*']
     CORS_ALLOW_HEADERS: list[str] = ['*']
 
-    TELEGRAM_BOT_TOKEN: str | None
-
-    class Config:
-        """Pydantic BaseSettings config"""
-
-        case_sensitive = True
-        env_file = ".env"
+    TELEGRAM_BOT_TOKEN: str | None = None
 
 
 @lru_cache
