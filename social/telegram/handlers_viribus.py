@@ -15,9 +15,7 @@ from telegram.ext import (
     MessageHandler,
     CommandHandler,
 )
-from telegram.ext.filters import (
-    Chat
-)
+from telegram.ext.filters import Chat
 
 from social.settings import get_settings
 from social.telegram.utils import CustomContext
@@ -37,6 +35,7 @@ GREETINGS = [
     """
 ]
 
+
 def register_handlers(app: Application):
     app.add_handler(CommandHandler(filters=Chat(CHAT_ID), callback=change_slug, command="slug"))
     app.add_handler(MessageHandler(filters=Chat(CHAT_ID), callback=delete_system_message))
@@ -49,9 +48,7 @@ async def delete_system_message(update: Update, context: CustomContext):
         await context.bot.send_message(
             chat_id=CHAT_ID,
             message_thread_id=MAIN_TOPIC_ID,
-            text=dedent(choice(GREETINGS)).format(
-                name=user.name, id=user.id
-            ),
+            text=dedent(choice(GREETINGS)).format(name=user.name, id=user.id),
             parse_mode='markdown',
         )
         logger.info(f"User {user.name} greeting sent")
@@ -69,11 +66,13 @@ async def change_slug(update: Update, context: CustomContext):
         await context.bot.send_message(
             chat_id=update.effective_message.chat.id,
             reply_to_message_id=update.effective_message.id,
-            text=dedent("""
+            text=dedent(
+                """
                 Эта команда меняет текст, который пишется справа от имени пользователя в этом чате
                 Текст толжен содержать только буквы, цифры, пробелы и некоторую пунктуацию, не более 16 символов
                 Напиши `/slug текст` для применения
-            """),
+            """
+            ),
             parse_mode='markdown',
         )
         return
