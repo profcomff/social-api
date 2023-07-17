@@ -1,12 +1,12 @@
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Request
 from fastapi_sqlalchemy import db
 from telegram import Update
 
+from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.settings import get_settings
 from social.telegram import get_application
-from social.models.webhook_storage import WebhookStorage, WebhookSystems
 
 
 router = APIRouter(prefix="/telegram", tags=["webhooks"])

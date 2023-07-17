@@ -1,10 +1,6 @@
-import re
 from dataclasses import dataclass
-from telegram.ext import (
-    Application,
-    CallbackContext,
-    ExtBot,
-)
+
+from telegram.ext import Application, CallbackContext, ExtBot
 
 
 @dataclass

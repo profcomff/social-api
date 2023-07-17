@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_sqlalchemy import DBSessionMiddleware
 
-from social.settings import get_settings
 from social import __version__
+from social.settings import get_settings
 from social.telegram import get_application as get_telegram
 
 from .github import router as github_rourer
