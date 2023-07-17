@@ -9,7 +9,10 @@ logger = logging.getLogger(__name__)
 class EventProcessor:
     """Процессор события
 
-    Имеет фильтры в формате `поле = маска-регулярное выражение` или `поле = lambda-функция`
+    Имеет фильтры в одном из форматов
+    - `поле = маска-регулярное выражение`
+    - `поле = lambda-функция`
+    - `поле = ...`, просто проверка существования
 
     Если регулярное выражение удовлетворено, запускает функцию
     """
@@ -25,6 +28,8 @@ class EventProcessor:
             elif callable(checker):
                 logger.debug("Lambda filter")
                 self.filters[field] = checker
+            elif checker is ...:
+                self.filters[field] = lambda x: True
             else:
                 raise TypeError("Filter should be regex or lambda")
 
