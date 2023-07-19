@@ -4,7 +4,7 @@ with GraphQL requests ([use Explorer](https://docs.github.com/ru/graphql/overvie
 
 
 ```graphql
-# This query return scrum project's id's (GH_SCRUM_ID). Bot only can add issue only to one project
+# This query return scrum project's id's (PROJECT_NODE_ID). Bot only can add issue only to one project
 {organization(login: "GH_ORGANIZATION_NICKNAME") {
     projectsV2(first: 100) {
       edges {
@@ -13,13 +13,10 @@ with GraphQL requests ([use Explorer](https://docs.github.com/ru/graphql/overvie
           id
           public
 }}}}}
-
-# Use GH_SCRUM_ID for next request.
-# Usually, if you want to set column automatically, you need results from ProjectV2SingleSelectField
-# GH_SCRUM_FIELD_ID is id
-# GH_SCRUM_FIELD_DEFAULT_STATE is options id
-
-{node(id: "GH_SCRUM_ID") {
+```
+```graphql
+# Use PROJECT_NODE_ID for next request.
+{node(id: "PROJECT_NODE_ID") {
     ... on ProjectV2 {
       fields(first: 20) {
         nodes {
