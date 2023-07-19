@@ -23,6 +23,7 @@ query GetItemDeadlineField($issue_id: ID!)
             fieldValues(last: 10) {
               totalCount
               edges {
+                __typename
                 node {
                   ... on ProjectV2ItemFieldDateValue {
                     id
