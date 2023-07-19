@@ -41,6 +41,16 @@ query GetItemDeadlineField($issue_id: ID!)
             }
           }
         }
+        nodes {
+          fieldValues(first: 100){
+            pageInfo {
+              hasPreviousPage
+              hasNextPage
+              endCursor
+              startCursor
+            }
+          }
+        }
       }
     }
   }
