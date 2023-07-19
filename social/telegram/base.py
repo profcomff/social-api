@@ -3,11 +3,7 @@ from functools import lru_cache
 from textwrap import dedent
 
 from telegram import Update
-from telegram.ext import (
-    Application,
-    ContextTypes,
-    CommandHandler,
-)
+from telegram.ext import Application, CommandHandler, ContextTypes
 
 from social.settings import get_settings
 

@@ -2,9 +2,9 @@ run:
 	source ./venv/bin/activate && uvicorn --reload --log-config logging_test.conf social.routes.base:app
 
 format: configure
-	source ./venv/bin/activate && autoflake -r --in-place --remove-all-unused-imports ./auth_backend
-	source ./venv/bin/activate && isort ./auth_backend
-	source ./venv/bin/activate && black ./auth_backend
+	source ./venv/bin/activate && autoflake -r --in-place --remove-all-unused-imports ./social
+	source ./venv/bin/activate && isort ./social
+	source ./venv/bin/activate && black ./social
 
 configure: venv
 	source ./venv/bin/activate && pip install -r requirements.dev.txt -r requirements.txt

@@ -4,17 +4,13 @@
 Update и Context, а потом зарегистрируй ее внутри функции `register_handlers`.
 """
 import logging
+from random import choice
 from string import ascii_letters, digits, punctuation
 from textwrap import dedent
-from random import choice
 
 from telegram import Update
 from telegram.error import TelegramError
-from telegram.ext import (
-    Application,
-    MessageHandler,
-    CommandHandler,
-)
+from telegram.ext import Application, CommandHandler, MessageHandler
 from telegram.ext.filters import Chat
 
 from social.settings import get_settings

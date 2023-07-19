@@ -1,8 +1,8 @@
 import os
+from functools import lru_cache
 
 from pydantic import ConfigDict, PostgresDsn
 from pydantic_settings import BaseSettings
-from functools import lru_cache
 
 
 class Settings(BaseSettings):
@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     CORS_ALLOW_HEADERS: list[str] = ['*']
 
     TELEGRAM_BOT_TOKEN: str | None = None
+
+    GITHUB_APP_ID: str | None = None
+    GITHUB_WEBHOOK_SECRET: str | None = None
+    GITHUB_PRIVATE_KEY: str | None = None
 
 
 @lru_cache
