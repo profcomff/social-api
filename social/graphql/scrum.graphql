@@ -5,3 +5,43 @@ mutation AddToScrum($projectId: ID!, $contentId: ID!) {
     }
   }
 }
+
+
+query GetItemDeadlineField($issue_id: ID!)
+{
+  node(id: $issue_id) {
+    ... on Issue {
+      id
+      title
+      projectItems(first: 2) {
+        totalCount
+        __typename
+        edges {
+          node {
+            id
+            __typename
+            fieldValues(last: 10) {
+              totalCount
+              edges {
+                node {
+                  ... on ProjectV2ItemFieldDateValue {
+                    id
+                    __typename
+                    field {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                        __typename
+                      }
+                    }
+                    date
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
