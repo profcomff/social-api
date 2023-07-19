@@ -10,3 +10,4 @@ gunicorn
 logging-profcomff
 auth-lib-profcomff[fastapi]
 python-telegram-bot
+gql[requests]
