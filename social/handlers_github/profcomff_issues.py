@@ -1,5 +1,6 @@
 import json
 import logging
+import datetime
 
 # from social.utils.github_api import get_github
 
@@ -44,22 +45,38 @@ def issue_opened(event):
         issueId="I_kwDOJKPa4c5sDObA",  # TODO: event["issue"].get("node_id")
     )
 
-    projectItemId = r['node']['projectItems']['nodes'][0]['id']
-    deadlineDate = None
-    takenDate = None
+    project_item_id = r['node']['projectItems']['nodes'][0]['id']
+    deadline_date = None
+    taken_date = None
     for node in r['node']['projectItems']['nodes'][0]['fieldValues']['nodes']:
         if len(node) != 0 and node['field']['name'] == 'Deadline':
-            deadlineDate = node['date']
+            deadline_date = datetime.datetime.strptime(node['date'], '%Y-%m-%d').date()
         if len(node) != 0 and node['field']['name'] == 'Taken':
-            takenDate = node['date']
+            taken_date = datetime.datetime.strptime(node['date'], '%Y-%m-%d').date()
 
-    print(projectItemId, deadlineDate, takenDate)
-    # r = github.request_gql(
-    #     'social/handlers_github/profcomff_issues.graphql',
-    #     'SetFieldDateValue',
-    #     issueId="I_kwDOJKPa4c5sDObA",
-    # )
-    logging.debug("Response %s", r)
+    print(deadline_date, taken_date)
+
+    if deadline_date is None or deadline_date < datetime.date.today():
+        deadline_date = str((datetime.date.today() + datetime.timedelta(days=7)))
+        r = github.request_gql(
+            'social/handlers_github/profcomff_issues.graphql',
+            'SetFieldDateValue',
+            projectId=PROJECT_NODE_ID,
+            itemId=project_item_id,
+            fieldId=DEADLINE_FIELD_NODE_ID,
+            newDate=deadline_date
+        )
+
+    if taken_date is None:
+        taken_date = str(datetime.date.today())
+        r = github.request_gql(
+            'social/handlers_github/profcomff_issues.graphql',
+            'SetFieldDateValue',
+            projectId=PROJECT_NODE_ID,
+            itemId=project_item_id,
+            fieldId=TAKEN_FIELD_NODE_ID,
+            newDate=taken_date
+        )
 
 
 if __name__ == "__main__":

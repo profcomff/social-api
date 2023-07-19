@@ -40,17 +40,21 @@ query GetIssueDeadlineField($issueId: ID!) {
     }
 }
 
+#{"projectId": "PVT_kwDOBaPiZM4AFiz-",
+#            "itemId": "PVTI_lADOBaPiZM4AFiz-zgICgvE",
+#            "fieldId": "PVTF_lADOBaPiZM4AFiz-zgHTmbk",
+#            "newDate": "2023-07-24"}
 
 # "PVT_kwDOBaPiZM4AFiz-",
 # "PVTI_lADOBaPiZM4AFiz-zgICgvE",
 # "PVTF_lADOBaPiZM4AFiz-zgHTmbk",
-mutation SetFieldDateValue($projectId: ID!, $itemId: ID!, $fieldId: ID!, $takenDate: Date!){
+mutation SetFieldDateValue($projectId: ID!, $itemId: ID!, $fieldId: ID!, $newDate: Date!){
     updateProjectV2ItemFieldValue(
         input: {
             projectId: $projectId,
             itemId: $itemId,
             fieldId: $fieldId,
-            value: {date:$takenDate}
+            value: {date: $newDate}
         }
     ) {
         projectV2Item {
