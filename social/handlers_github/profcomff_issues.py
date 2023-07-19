@@ -2,16 +2,14 @@ import json
 import logging
 import datetime
 
-# from social.utils.github_api import get_github
+from social.utils.github_api import get_github
 
 from social.handlers_github.base import event
 
 
 logger = logging.getLogger(__name__)
-# github = get_github('profcomff')
+github = get_github('profcomff')
 
-from social.handlers_github.delete_me import Github
-github = Github()
 
 PROJECT_NODE_ID = "PVT_kwDOBaPiZM4AFiz-"  # Доска Твой ФФ
 DEADLINE_FIELD_NODE_ID = "PVTF_lADOBaPiZM4AFiz-zgHTmbk"  # Поле Deadline для задач на доске Твой ФФ
