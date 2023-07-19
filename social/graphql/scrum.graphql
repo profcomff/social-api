@@ -5,13 +5,3 @@ mutation AddToScrum($projectId: ID!, $contentId: ID!) {
     }
   }
 }
-
-mutation SetScrumStatus($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: String!) {
-  updateProjectV2ItemFieldValue(
-    input: {projectId: $projectId, itemId: $itemId, fieldId: $fieldId, value: {singleSelectOptionId: $value}}
-  ) {
-    projectV2Item {
-      id
-    }
-  }
-}
