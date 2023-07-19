@@ -1,5 +1,4 @@
 import datetime
-import json
 import logging
 
 from social.handlers_github.base import event

@@ -14,10 +14,8 @@ query GetIssueDeadlineField($issueId: ID!) {
             title
             projectItems(first: 10) {
                 totalCount
-                __typename
                 nodes {
                     id
-                    __typename
                     fieldValues(first: 15, orderBy: {field: POSITION, direction: DESC}) {
                         nodes {
                             ... on ProjectV2ItemFieldDateValue {
