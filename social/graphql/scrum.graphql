@@ -24,6 +24,7 @@ query GetItemDeadlineField($issue_id: ID!)
               totalCount
               edges {
                 __typename
+
                 node {
                   ... on ProjectV2ItemFieldDateValue {
                     id
@@ -36,6 +37,15 @@ query GetItemDeadlineField($issue_id: ID!)
                       }
                     }
                     date
+                  }
+                  ... on ProjectV2ItemFieldLabelValue {
+                    field {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                        __typename
+                      }
+                    }
                   }
                 }
               }
