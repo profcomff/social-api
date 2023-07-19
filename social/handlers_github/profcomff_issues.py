@@ -19,7 +19,7 @@ def issue_opened(event):
     """При открытиии новой ишью добавляет ее на достку "Твой ФФ" """
     logger.debug("Issue %s created (node_id=%s)", event["issue"].get("url"), event["issue"].get("node_id"))
     r = github.request_gql(
-        'social/handlers_github/profcomff_issues.gql',
+        'social/handlers_github/profcomff_issues.graphql',
         'AddToScrum',
         projectId=PROJECT_NODE_ID,
         contentId=event["issue"].get("node_id"),
