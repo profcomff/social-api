@@ -1,43 +1,78 @@
 mutation AddToScrum($projectId: ID!, $contentId: ID!) {
-  addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
-    item {
-      id
+    addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+        item {
+            id
+        }
     }
-  }
 }
 
 
 query GetIssueDeadlineField($issueId: ID!) {
-  node(id: $issueId) {
-    ... on Issue {
-      id
-      title
-      projectItems(first: 10) {
-        totalCount
-       __typename
-        edges {
-          node {
+    node(id: $issueId) {
+        ... on Issue {
             id
-            __typename
-            fieldValues(first: 10) {
-              edges {
-                node {
-                  ... on ProjectV2ItemFieldDateValue {
+            title
+            projectItems(first: 10) {
+                totalCount
+                __typename
+                nodes {
                     id
-                    field {
-                      ... on ProjectV2Field {
-                        id
-                        name
-                      }
+                    __typename
+                    fieldValues(first: 15, orderBy: {field: POSITION, direction: DESC}) {
+                            nodes {
+                                ... on ProjectV2ItemFieldDateValue {
+                                    id
+                                    field {
+                                        ... on ProjectV2Field {
+                                            id
+                                            name
+                                            __typename
+                                        }
+                                    }
+                                    date
+                                    __typename
+                                }
+                        }
                     }
-                    date
-                  }
                 }
-              }
             }
-          }
         }
-      }
     }
-  }
+}
+
+
+# "PVT_kwDOBaPiZM4AFiz-",
+# "PVTI_lADOBaPiZM4AFiz-zgICgvE",
+# "PVTF_lADOBaPiZM4AFiz-zgHTmbk",
+mutation SetFieldDateValue($projectId: ID!, $itemId: ID!, $fieldId: ID!, $takenDate: Date!){
+    updateProjectV2ItemFieldValue(
+        input: {
+            projectId: $projectId,
+            itemId: $itemId,
+            fieldId: $fieldId,
+            value: {date:$takenDate}
+        }
+    ) {
+        projectV2Item {
+            __typename
+            createdAt
+            updatedAt
+            fieldValues(first: 10, orderBy: {field: POSITION, direction: DESC}) {
+                nodes {
+                    ... on ProjectV2ItemFieldDateValue {
+                        id
+                        field {
+                            ... on ProjectV2Field {
+                                id
+                                name
+                                __typename
+                            }
+                        }
+                        date
+                        __typename
+                    }
+                }
+            }
+        }
+    }
 }
