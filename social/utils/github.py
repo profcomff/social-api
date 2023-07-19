@@ -17,7 +17,7 @@ class Github:
 
         self.client = Client(transport=self.transport)
 
-        with open('src/graphql/scrum.graphql') as f:
+        with open('social/utils/scrum.graphql') as f:
             self.q_add_to_scrum = gql(f.read())
 
     def add_to_scrum(self, issue_id):
