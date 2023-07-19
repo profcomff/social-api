@@ -3,7 +3,7 @@ import logging
 from fastapi import APIRouter, BackgroundTasks, Request
 from fastapi_sqlalchemy import db
 
-from social.github import process_event
+from social.handlers_github import process_event
 from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.settings import get_settings
 

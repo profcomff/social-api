@@ -14,7 +14,8 @@ from telegram.ext import Application, CommandHandler, MessageHandler
 from telegram.ext.filters import Chat
 
 from social.settings import get_settings
-from social.telegram.utils import CustomContext
+
+from .utils import CustomContext
 
 
 logger = logging.getLogger(__name__)

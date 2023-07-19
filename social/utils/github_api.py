@@ -1,14 +1,14 @@
 import logging
-import jwt
 import os.path
-import requests
 import time
+from datetime import datetime
 from functools import lru_cache
-from datetime import datetime, tzinfo
 
-from graphql import DocumentNode
+import jwt
+import requests
 from gql import Client, gql
 from gql.transport.requests import RequestsHTTPTransport
+from graphql import DocumentNode
 
 from social.settings import get_settings
 
@@ -42,7 +42,7 @@ class GitHub:
             # JWT expiration time (10 minutes maximum)
             'exp': int(expiration),
             # GitHub App's identifier
-            'iss': self._app_id
+            'iss': self._app_id,
         }
 
         # Create JWT
@@ -52,11 +52,7 @@ class GitHub:
         self._jwt, self._jwt_expire = encoded_jwt, expiration
 
     def _update_org_token(self):
-        if (
-            self._jwt is None
-            or self._jwt_expire is None
-            or self._jwt_expire <= time.time()
-        ):
+        if self._jwt is None or self._jwt_expire is None or self._jwt_expire <= time.time():
             self._reauth()
         r = requests.get(
             f'https://api.github.com/orgs/{self._org}/installation',
@@ -64,7 +60,7 @@ class GitHub:
                 "Accept": "application/vnd.github+json",
                 "Authorization": f"Bearer {self._jwt}",
                 "X-GitHub-Api-Version": "2022-11-28",
-            }
+            },
         )
         logger.debug("Installation request: %s", r)
         installation_token_url = r.json()['access_tokens_url']
@@ -76,7 +72,7 @@ class GitHub:
                 "Accept": "application/vnd.github+json",
                 "Authorization": f"Bearer {self._jwt}",
                 "X-GitHub-Api-Version": "2022-11-28",
-            }
+            },
         ).json()
         logger.debug("Token request: %s", r)
         self._org_token = r['token']
@@ -96,7 +92,7 @@ class GitHub:
                 url='https://api.github.com/graphql',
                 verify=True,
                 retries=1,
-                headers={'Authorization': f'Bearer {self._org_token}'}
+                headers={'Authorization': f'Bearer {self._org_token}'},
             )
             self._client = Client(transport=transport)
         return self._client
