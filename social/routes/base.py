@@ -4,7 +4,7 @@ from fastapi_sqlalchemy import DBSessionMiddleware
 
 from social import __version__
 from social.settings import get_settings
-from social.telegram import get_application as get_telegram
+from social.handlers_telegram import get_application as get_telegram
 
 from .github import router as github_rourer
 from .telegram import router as telegram_rourer

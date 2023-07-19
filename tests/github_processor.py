@@ -1,6 +1,6 @@
 import pytest
 from datetime import datetime
-from social.github.base import EventProcessor
+from social.handlers_github.base import EventProcessor
 
 
 @pytest.fixture

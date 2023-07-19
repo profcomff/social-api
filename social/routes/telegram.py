@@ -6,7 +6,7 @@ from telegram import Update
 
 from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.settings import get_settings
-from social.telegram import get_application
+from social.handlers_telegram import get_application
 
 
 router = APIRouter(prefix="/telegram", tags=["webhooks"])
