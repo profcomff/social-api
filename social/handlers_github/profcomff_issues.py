@@ -1,10 +1,9 @@
+import datetime
 import json
 import logging
-import datetime
-
-from social.utils.github_api import get_github
 
 from social.handlers_github.base import event
+from social.utils.github_api import get_github
 
 
 logger = logging.getLogger(__name__)

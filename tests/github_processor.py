@@ -1,5 +1,7 @@
-import pytest
 from datetime import datetime
+
+import pytest
+
 from social.handlers_github.base import EventProcessor
 
 
