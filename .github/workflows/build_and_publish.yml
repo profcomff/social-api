@@ -129,6 +129,8 @@ jobs:
             --network=web \
             --env DB_DSN='${{ secrets.DB_DSN }}' \
             --env TELEGRAM_BOT_TOKEN='${{ secrets.TELEGRAM_BOT_TOKEN }}' \
+            --env GITHUB_APP_ID='${{ secrets.GH_APP_ID }}' \
+            --env GITHUB_PRIVATE_KEY='${{ secrets.GH_PRIVATE_KEY }}' \
             --env GUNICORN_CMD_ARGS='--log-config logging_prod.conf' \
             --name ${{ env.CONTAINER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
