@@ -16,12 +16,28 @@ TAKEN_FIELD_NODE_ID = "PVTF_lADOBaPiZM4AFiz-zgHTme8"  # Поле Taken для з
 
 @event(issue=..., action="opened")
 def issue_opened(event):
-    """При открытиии новой ишью добавляет ее на достку "Твой ФФ" """
+    """При открытии новой issue добавляет ее на доску "Твой ФФ" """
     logger.debug("Issue %s created (node_id=%s)", event["issue"].get("url"), event["issue"].get("node_id"))
     r = github.request_gql(
         'social/handlers_github/profcomff_issues.graphql',
         'AddToScrum',
         projectId=PROJECT_NODE_ID,
         contentId=event["issue"].get("node_id"),
+    )
+    logging.debug("Response %s", r)
+
+
+@event(issue=..., action="assigned")
+def issue_opened(event):
+    """
+    При назначении исполнителя для issue,
+    если дедлайн не назначен, то назначает дедлайн +неделю от текущей даты
+    если дедлайн просрочен (то есть смена исполнителя), то назначает дедлайн +неделю от текущей даты
+    """
+    logger.debug("Issue %s assigned (node_id=%s)", event["issue"].get("url"), event["issue"].get("node_id"))
+    r = github.request_gql(
+        'social/handlers_github/profcomff_issues.graphql',
+        'GetIssueDeadlineField',
+        issueId=event["issue"].get("node_id"),
     )
     logging.debug("Response %s", r)
