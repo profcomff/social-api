@@ -4,9 +4,9 @@ from fastapi import APIRouter, Request
 from fastapi_sqlalchemy import db
 from telegram import Update
 
+from social.handlers_telegram import get_application
 from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.settings import get_settings
-from social.handlers_telegram import get_application
 
 
 router = APIRouter(prefix="/telegram", tags=["webhooks"])

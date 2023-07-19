@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi_sqlalchemy import DBSessionMiddleware
 
 from social import __version__
-from social.settings import get_settings
 from social.handlers_telegram import get_application as get_telegram
+from social.settings import get_settings
 
 from .github import router as github_rourer
 from .telegram import router as telegram_rourer
