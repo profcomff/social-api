@@ -116,4 +116,7 @@ class GitHub:
             return self.client.execute(gql(file_or_query), params, operation_name)
 
 
-github = GitHub(settings.GITHUB_APP_ID, settings.GITHUB_PRIVATE_KEY, 'profcomff')
+@lru_cache()
+def get_github(org):
+    github = GitHub(settings.GITHUB_APP_ID, settings.GITHUB_PRIVATE_KEY, org)
+    return github
