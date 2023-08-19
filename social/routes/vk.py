@@ -2,14 +2,15 @@ import logging
 import random
 import string
 
-from fastapi import APIRouter, Request
+from auth_lib.fastapi import UnionAuth
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import PlainTextResponse
 from fastapi_sqlalchemy import db
 from pydantic import BaseModel, ConfigDict
 
 from social.handlers_telegram import get_application
-from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.models.vk import VkGroups
+from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.settings import get_settings
 
 
@@ -22,6 +23,7 @@ application = get_application()
 class VkGroupCreate(BaseModel):
     confirmation_token: str
     change_secret_key: bool = False
+
 
 class VkGroupCreateResponse(BaseModel):
     group_id: int
@@ -61,7 +63,9 @@ def random_string(N: int):
 
 
 @router.put('/{group_id}')
-def create_or_replace_group(group_id: int, group_info: VkGroupCreate) -> VkGroupCreateResponse:
+def create_or_replace_group(
+    group_id: int, group_info: VkGroupCreate, _=Depends(UnionAuth(["social.vk_group.create"]))
+) -> VkGroupCreateResponse:
     group = db.session.query(VkGroups).where(VkGroups.group_id == group_id).one_or_none()
     if group is None:
         group = VkGroups()
