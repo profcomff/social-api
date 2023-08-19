@@ -8,6 +8,7 @@ from social.settings import get_settings
 
 from .github import router as github_rourer
 from .telegram import router as telegram_rourer
+from .vk import router as vk_rourer
 
 
 settings = get_settings()
@@ -52,3 +53,4 @@ async def shutdown():
 
 app.include_router(github_rourer)
 app.include_router(telegram_rourer)
+app.include_router(vk_rourer)
