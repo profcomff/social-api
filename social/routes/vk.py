@@ -1,6 +1,4 @@
 import logging
-import random
-import string
 
 from auth_lib.fastapi import UnionAuth
 from fastapi import APIRouter, Depends, Request
@@ -12,6 +10,7 @@ from social.handlers_telegram import get_application
 from social.models.vk import VkGroups
 from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.settings import get_settings
+from social.utils.string import random_string
 
 
 router = APIRouter(prefix="/vk", tags=['vk'])
@@ -34,7 +33,7 @@ class VkGroupCreateResponse(BaseModel):
 
 @router.post('', tags=["webhooks"])
 async def vk_webhook(request: Request):
-    """Принимает любой POST запрос от Telegram"""
+    """Принимает любой POST запрос от VK"""
     request_data = await request.json()
     logger.debug(request_data)
     group_id = request_data["group_id"]  # Fail if no group
@@ -56,10 +55,6 @@ async def vk_webhook(request: Request):
     db.session.commit()
 
     return
-
-
-def random_string(N: int):
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=N))
 
 
 @router.put('/{group_id}')
