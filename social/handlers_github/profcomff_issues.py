@@ -67,7 +67,7 @@ def issue_opened(event):
             projectId=PROJECT_NODE_ID,
             itemId=project_item_id,
             fieldId=DEADLINE_FIELD_NODE_ID,
-            newDate=new_deadline_date
+            newDate=new_deadline_date,
         )
         logging.debug("Deadline change response: %s", r)
 
@@ -81,6 +81,6 @@ def issue_opened(event):
             projectId=PROJECT_NODE_ID,
             itemId=project_item_id,
             fieldId=TAKEN_FIELD_NODE_ID,
-            newDate=new_taken_date
+            newDate=new_taken_date,
         )
         logging.debug("Taken change response: %s", r)

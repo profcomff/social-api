@@ -25,7 +25,7 @@ def get_application():
 
     # Хэндлеры конкретных чатов
     register_handlers(app)
-    
+
     return app
 
 

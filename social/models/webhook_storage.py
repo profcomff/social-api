@@ -9,6 +9,7 @@ from .base import Base
 class WebhookSystems(str, Enum):
     TELEGRAM = 'telegram'
     GITHUB = 'github'
+    VK = 'vk'
 
 
 class WebhookStorage(Base):
