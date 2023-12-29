@@ -32,7 +32,7 @@ class VkGroupCreateResponse(BaseModel):
 
 
 @router.post('', tags=["webhooks"])
-async def vk_webhook(request: Request):
+async def vk_webhook(request: Request) -> str:
     """Принимает любой POST запрос от VK"""
     request_data = await request.json()
     logger.debug(request_data)
@@ -54,7 +54,7 @@ async def vk_webhook(request: Request):
     )
     db.session.commit()
 
-    return
+    return PlainTextResponse('ok')
 
 
 @router.put('/{group_id}')
