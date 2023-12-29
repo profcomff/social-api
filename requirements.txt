@@ -12,3 +12,4 @@ auth-lib-profcomff[fastapi]
 python-telegram-bot
 jwt
 gql[requests]
+pynacl

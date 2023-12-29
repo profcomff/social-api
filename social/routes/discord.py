@@ -1,8 +1,10 @@
 import logging
 
-from fastapi import APIRouter, BackgroundTasks, Request
+from fastapi import APIRouter, BackgroundTasks, Request, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi_sqlalchemy import db
+from nacl.signing import VerifyKey
+from nacl.exceptions import BadSignatureError
 
 from social.handlers_discord.base import process_event
 from social.models.webhook_storage import WebhookStorage, WebhookSystems
@@ -12,13 +14,23 @@ from social.settings import get_settings
 router = APIRouter(prefix="/discord", tags=["webhooks"])
 settings = get_settings()
 logger = logging.getLogger(__name__)
+verify_key = VerifyKey(bytes.fromhex(settings.DISCORD_PUBLIC_KEY))
 
 
 @router.post('')
 async def discord_webhook(request: Request, background_tasks: BackgroundTasks):
     """Принимает любой POST запрос от discord"""
-    request_data = await request.json()
+    request_data: dict[str] = await request.json()
     logger.debug(request_data)
+
+    signature = request.headers.get("X-Signature-Ed25519", "")
+    timestamp = request.headers.get("X-Signature-Timestamp", "")
+    body = (await request.body()).decode("utf-8")
+
+    try:
+        verify_key.verify(f'{timestamp}{body}'.encode(), bytes.fromhex(signature))
+    except BadSignatureError:
+        raise HTTPException(401, 'invalid request signature')
 
     db.session.add(
         WebhookStorage(

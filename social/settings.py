@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     GITHUB_WEBHOOK_SECRET: str | None = None
     GITHUB_PRIVATE_KEY: str | None = None
 
+    DISCORD_PUBLIC_KEY: str | None = None
+
 
 @lru_cache
 def get_settings() -> Settings:
