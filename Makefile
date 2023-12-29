@@ -1,5 +1,5 @@
 run:
-	source ./venv/bin/activate && uvicorn --reload --log-config logging_test.conf social.routes.base:app
+	source ./venv/bin/activate && uvicorn --reload --log-config logging_dev.conf social.routes.base:app
 
 format: configure
 	source ./venv/bin/activate && autoflake -r --in-place --remove-all-unused-imports ./social
