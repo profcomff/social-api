@@ -10,6 +10,7 @@ class WebhookSystems(str, Enum):
     TELEGRAM = 'telegram'
     GITHUB = 'github'
     VK = 'vk'
+    DISCORD = 'discord'
 
 
 class WebhookStorage(Base):

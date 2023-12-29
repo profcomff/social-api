@@ -6,9 +6,10 @@ from social import __version__
 from social.handlers_telegram import get_application as get_telegram
 from social.settings import get_settings
 
-from .github import router as github_rourer
-from .telegram import router as telegram_rourer
-from .vk import router as vk_rourer
+from .github import router as github_router
+from .telegram import router as telegram_router
+from .vk import router as vk_router
+from .discord import router as discord_router
 
 
 settings = get_settings()
@@ -51,6 +52,7 @@ async def shutdown():
     await telegram.shutdown()
 
 
-app.include_router(github_rourer)
-app.include_router(telegram_rourer)
-app.include_router(vk_rourer)
+app.include_router(github_router)
+app.include_router(telegram_router)
+app.include_router(vk_router)
+app.include_router(discord_router)

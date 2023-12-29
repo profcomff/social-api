@@ -3,25 +3,25 @@ import logging
 from fastapi import APIRouter, BackgroundTasks, Request
 from fastapi_sqlalchemy import db
 
-from social.handlers_github.base import process_event
+from social.handlers_discord.base import process_event
 from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.settings import get_settings
 
 
-router = APIRouter(prefix="/github", tags=["webhooks"])
+router = APIRouter(prefix="/discord", tags=["webhooks"])
 settings = get_settings()
 logger = logging.getLogger(__name__)
 
 
 @router.post('')
-async def github_webhook(request: Request, background_tasks: BackgroundTasks):
-    """Принимает любой POST запрос от github"""
+async def discord_webhook(request: Request, background_tasks: BackgroundTasks):
+    """Принимает любой POST запрос от discord"""
     request_data = await request.json()
     logger.debug(request_data)
 
     db.session.add(
         WebhookStorage(
-            system=WebhookSystems.GITHUB,
+            system=WebhookSystems.DISCORD,
             message=request_data,
         )
     )
