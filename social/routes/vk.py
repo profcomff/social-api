@@ -7,7 +7,7 @@ from fastapi_sqlalchemy import db
 from pydantic import BaseModel, ConfigDict
 
 from social.handlers_telegram import get_application
-from social.models.vk import VkGroups
+from social.models.group import VkGroup
 from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.settings import get_settings
 from social.utils.string import random_string
@@ -37,7 +37,7 @@ async def vk_webhook(request: Request) -> str:
     request_data = await request.json()
     logger.debug(request_data)
     group_id = request_data["group_id"]  # Fail if no group
-    group = db.session.query(VkGroups).where(VkGroups.group_id == group_id).one()  # Fail if no settings
+    group = db.session.query(VkGroup).where(VkGroup.group_id == group_id).one()  # Fail if no settings
 
     # Проверка на создание нового вебхука со страничка ВК
     if request_data.get("type", "") == "confirmation":
@@ -61,9 +61,9 @@ async def vk_webhook(request: Request) -> str:
 def create_or_replace_group(
     group_id: int, group_info: VkGroupCreate, _=Depends(UnionAuth(["social.vk_group.create"]))
 ) -> VkGroupCreateResponse:
-    group = db.session.query(VkGroups).where(VkGroups.group_id == group_id).one_or_none()
+    group = db.session.query(VkGroup).where(VkGroup.group_id == group_id).one_or_none()
     if group is None:
-        group = VkGroups()
+        group = VkGroup()
         db.session.add(group)
         group.group_id = group_id
         group.secret_key = random_string(32)
