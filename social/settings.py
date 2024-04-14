@@ -20,6 +20,8 @@ class Settings(BaseSettings):
 
     TELEGRAM_BOT_TOKEN: str | None = None
 
+    VK_BOT_TOKEN: str | None = None
+
     GITHUB_APP_ID: int | None = None
     GITHUB_WEBHOOK_SECRET: str | None = None
     GITHUB_PRIVATE_KEY: str | None = None

@@ -66,7 +66,7 @@ def upgrade():
     op.create_table(
         'vk_chat',
         sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('chat_id', sa.Integer(), nullable=False),
+        sa.Column('peer_id', sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(
             ['id'],
             ['group.id'],

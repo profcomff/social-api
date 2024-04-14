@@ -35,7 +35,7 @@ class VkGroup(Group):
 
 class VkChat(Group):
     id: Mapped[int] = mapped_column(sa.ForeignKey("group.id"), primary_key=True)
-    chat_id: Mapped[int]
+    peer_id: Mapped[int]
 
     __mapper_args__ = {
         "polymorphic_identity": "vk_chat",
