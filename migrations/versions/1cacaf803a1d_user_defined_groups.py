@@ -6,9 +6,10 @@ Create Date: 2024-04-14 23:38:18.956845
 
 """
 
-from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.schema import Sequence, CreateSequence
+from alembic import op
+from sqlalchemy.schema import CreateSequence, Sequence
+
 
 # revision identifiers, used by Alembic.
 revision = '1cacaf803a1d'
@@ -28,16 +29,18 @@ def upgrade():
         sa.Column('create_ts', sa.DateTime(), nullable=False),
         sa.Column('update_ts', sa.DateTime(), nullable=False),
     )
-    op.execute('''
+    op.execute(
+        '''
         INSERT INTO "group"
             (id, type, is_deleted, last_active_ts, create_ts, update_ts)
         SELECT id, 'vk_group', False, now(), create_ts, update_ts
         FROM vk_groups;
-    ''')
+    '''
+    )
 
     max_id = op.get_bind().execute(sa.text('SELECT MAX(id) FROM "group";')).scalar()
     op.create_primary_key('group_pk', 'group', ['id'])
-    op.execute(CreateSequence(Sequence('group_id_seq', max_id+1)))
+    op.execute(CreateSequence(Sequence('group_id_seq', max_id + 1)))
     op.alter_column('group', 'id', server_default=sa.text('nextval(\'group_id_seq\')'))
 
     op.create_table(
@@ -81,7 +84,7 @@ def downgrade():
     op.rename_table('vk_group', 'vk_groups')
 
     max_id = op.get_bind().execute(sa.text('SELECT MAX(id) FROM "vk_groups";')).scalar()
-    op.execute(CreateSequence(Sequence('vk_groups_id_seq', max_id+1)))
+    op.execute(CreateSequence(Sequence('vk_groups_id_seq', max_id + 1)))
     op.alter_column('vk_groups', 'id', server_default=sa.text('nextval(\'vk_groups_id_seq\')'))
 
     op.add_column('vk_groups', sa.Column('create_ts', sa.DateTime()))

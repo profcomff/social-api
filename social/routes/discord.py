@@ -1,10 +1,10 @@
 import logging
 
-from fastapi import APIRouter, BackgroundTasks, Request, HTTPException
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi_sqlalchemy import db
-from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
+from nacl.signing import VerifyKey
 
 from social.handlers_discord.base import process_event
 from social.models.webhook_storage import WebhookStorage, WebhookSystems

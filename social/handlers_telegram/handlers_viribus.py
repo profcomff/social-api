@@ -3,6 +3,7 @@
 Для создания нового обработчика создай асинхронную функцию в конце файла с параметрами
 Update и Context, а потом зарегистрируй ее внутри функции `register_handlers`.
 """
+
 import logging
 from random import choice
 from string import ascii_letters, digits, punctuation

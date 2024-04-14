@@ -1,4 +1,4 @@
-from .group import TelegramChannel, TelegramChat, VkGroup, VkChat
+from .group import TelegramChannel, TelegramChat, VkChat, VkGroup
 from .webhook_storage import WebhookStorage
 
 

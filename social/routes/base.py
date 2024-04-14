@@ -8,10 +8,10 @@ from social import __version__
 from social.handlers_telegram import get_application as get_telegram
 from social.settings import get_settings
 
+from .discord import router as discord_router
 from .github import router as github_router
 from .telegram import router as telegram_router
 from .vk import router as vk_router
-from .discord import router as discord_router
 
 
 settings = get_settings()

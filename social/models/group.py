@@ -1,4 +1,4 @@
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column
@@ -23,7 +23,7 @@ class Group(Base):
 
 
 class VkGroup(Group):
-    id: Mapped[int] = mapped_column(sa.ForeignKey("group.id"),primary_key=True)
+    id: Mapped[int] = mapped_column(sa.ForeignKey("group.id"), primary_key=True)
     group_id: Mapped[int]
     confirmation_token: Mapped[str]
     secret_key: Mapped[str]
@@ -34,7 +34,7 @@ class VkGroup(Group):
 
 
 class VkChat(Group):
-    id: Mapped[int] = mapped_column(sa.ForeignKey("group.id"),primary_key=True)
+    id: Mapped[int] = mapped_column(sa.ForeignKey("group.id"), primary_key=True)
     chat_id: Mapped[int]
 
     __mapper_args__ = {
@@ -43,7 +43,7 @@ class VkChat(Group):
 
 
 class TelegramChannel(Group):
-    id: Mapped[int] = mapped_column(sa.ForeignKey("group.id"),primary_key=True)
+    id: Mapped[int] = mapped_column(sa.ForeignKey("group.id"), primary_key=True)
     channel_id: Mapped[int]
 
     __mapper_args__ = {
@@ -52,7 +52,7 @@ class TelegramChannel(Group):
 
 
 class TelegramChat(Group):
-    id: Mapped[int] = mapped_column(sa.ForeignKey("group.id"),primary_key=True)
+    id: Mapped[int] = mapped_column(sa.ForeignKey("group.id"), primary_key=True)
     chat_id: Mapped[int]
 
     __mapper_args__ = {

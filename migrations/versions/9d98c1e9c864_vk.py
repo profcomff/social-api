@@ -5,8 +5,9 @@ Revises: 57c72962d2b4
 Create Date: 2023-08-19 15:53:19.787309
 
 """
-from alembic import op
+
 import sqlalchemy as sa
+from alembic import op
 
 
 # revision identifiers, used by Alembic.
@@ -17,14 +18,15 @@ depends_on = None
 
 
 def upgrade():
-    op.create_table('vk_groups',
+    op.create_table(
+        'vk_groups',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('group_id', sa.Integer(), nullable=False),
         sa.Column('confirmation_token', sa.String(), nullable=False),
         sa.Column('secret_key', sa.String(), nullable=False),
         sa.Column('create_ts', sa.DateTime(), nullable=False),
         sa.Column('update_ts', sa.DateTime(), nullable=False),
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id'),
     )
 
 
