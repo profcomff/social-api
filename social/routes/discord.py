@@ -14,7 +14,6 @@ from social.settings import get_settings
 router = APIRouter(prefix="/discord", tags=["webhooks"])
 settings = get_settings()
 logger = logging.getLogger(__name__)
-verify_key = VerifyKey(bytes.fromhex(settings.DISCORD_PUBLIC_KEY))
 
 
 @router.post('')
@@ -28,6 +27,7 @@ async def discord_webhook(request: Request, background_tasks: BackgroundTasks):
     body = (await request.body()).decode("utf-8")
 
     try:
+        verify_key = VerifyKey(bytes.fromhex(settings.DISCORD_PUBLIC_KEY))
         verify_key.verify(f'{timestamp}{body}'.encode(), bytes.fromhex(signature))
     except BadSignatureError:
         raise HTTPException(401, 'invalid request signature')

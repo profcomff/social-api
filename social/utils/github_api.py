@@ -114,5 +114,7 @@ class GitHub:
 
 @lru_cache()
 def get_github(org):
+    if not settings.GITHUB_APP_ID:
+        return None
     github = GitHub(settings.GITHUB_APP_ID, settings.GITHUB_PRIVATE_KEY, org)
     return github

@@ -20,12 +20,13 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     telegram = get_telegram()
-    await telegram.initialize()
-    await telegram.start()
+    if telegram:
+        await telegram.initialize()
+        await telegram.start()
     yield
-    # Clean up the ML models and release the resources
-    await telegram.stop()
-    await telegram.shutdown()
+    if telegram:
+        await telegram.stop()
+        await telegram.shutdown()
 
 
 app = FastAPI(
@@ -34,7 +35,7 @@ app = FastAPI(
     version=__version__,
     lifespan=lifespan,
     # Настраиваем интернет документацию
-    root_path=settings.ROOT_PATH if __version__ != 'dev' else '/',
+    root_path=settings.ROOT_PATH if __version__ != 'dev' else '',
     docs_url=None if __version__ != 'dev' else '/docs',
     redoc_url=None,
 )
@@ -55,7 +56,6 @@ app.add_middleware(
 )
 
 
-app.include_router(group_router)
 app.include_router(github_router)
 app.include_router(telegram_router)
 app.include_router(vk_router)
