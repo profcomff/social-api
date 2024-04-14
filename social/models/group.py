@@ -12,8 +12,7 @@ class Group(Base):
     owner_id: Mapped[int | None]
 
     is_deleted: Mapped[bool] = mapped_column(default=False)
-    is_active: Mapped[bool] = mapped_column(default=False)
-    activation_token: Mapped[str | None]
+    last_active_ts: Mapped[datetime | None]
 
     create_ts: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC))
     update_ts: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC))
