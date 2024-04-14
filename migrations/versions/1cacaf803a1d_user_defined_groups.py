@@ -38,7 +38,7 @@ def upgrade():
     '''
     )
 
-    max_id = op.get_bind().execute(sa.text('SELECT MAX(id) FROM "group";')).scalar()
+    max_id = op.get_bind().execute(sa.text('SELECT MAX(id) FROM "group";')).scalar() or 0
     op.create_primary_key('group_pk', 'group', ['id'])
     op.execute(CreateSequence(Sequence('group_id_seq', max_id + 1)))
     op.alter_column('group', 'id', server_default=sa.text('nextval(\'group_id_seq\')'))
@@ -83,7 +83,7 @@ def upgrade():
 def downgrade():
     op.rename_table('vk_group', 'vk_groups')
 
-    max_id = op.get_bind().execute(sa.text('SELECT MAX(id) FROM "vk_groups";')).scalar()
+    max_id = op.get_bind().execute(sa.text('SELECT MAX(id) FROM "vk_groups";')).scalar() or 0
     op.execute(CreateSequence(Sequence('vk_groups_id_seq', max_id + 1)))
     op.alter_column('vk_groups', 'id', server_default=sa.text('nextval(\'vk_groups_id_seq\')'))
 
