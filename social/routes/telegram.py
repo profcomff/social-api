@@ -24,13 +24,13 @@ async def telegram_webhook(request: Request):
     request_data = await request.json()
     logger.debug(request_data)
 
-    with db.session as s:
-        s.add(
-            WebhookStorage(
-                system=WebhookSystems.TELEGRAM,
-                message=request_data,
-            )
+    db.session.add(
+        WebhookStorage(
+            system=WebhookSystems.TELEGRAM,
+            message=request_data,
         )
+    )
+    db.session.commit()
 
     update = Update.de_json(data=request_data, bot=application.bot)
     add_msg = create_task(application.update_queue.put(update))
