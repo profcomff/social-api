@@ -52,5 +52,7 @@ async def validate_group(update: Update, context: CustomContext):
     logger.info("Validation message received")
     with db():
         approve_telegram_group(update)
-    res = await update.effective_message.delete()
-    logger.info(f"Validation message handled, delete status = {res}")
+    try:
+        await update.effective_message.delete()
+    except Exception:
+        logger.exception("Failed to delete message")
