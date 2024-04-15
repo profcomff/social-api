@@ -6,6 +6,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
 from social.settings import get_settings
+from social.utils.telegram_groups import approve_telegram_group
 
 from .handlers_viribus import register_handlers
 from .utils import CustomContext
@@ -24,6 +25,7 @@ def get_application():
     logger.info("Telegram API initialized successfully")
     # Общие хэндлеры
     app.add_handler(CommandHandler(callback=send_help, command="help"))
+    app.add_handler(CommandHandler(callback=get_validate, command="validate"))
 
     # Хэндлеры конкретных чатов
     register_handlers(app)
@@ -43,3 +45,9 @@ async def send_help(update: Update, context: CustomContext):
         ),
         parse_mode='markdown',
     )
+
+
+async def get_validate(update: Update, context: CustomContext):
+    approve_telegram_group(update)
+    res = await update.effective_message.delete()
+    logger.info(f"Validation message handled, delete status = {res}")
