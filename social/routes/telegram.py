@@ -18,6 +18,23 @@ logger = logging.getLogger(__name__)
 application = get_application()
 
 
+def create_group(update: Update):
+    chat = update.effective_chat
+    obj = None
+    if chat.type in ['group', 'supergroup']:
+        obj = db.session.query(TelegramChat).where(TelegramChat.chat_id == chat.id).one_or_none()
+        if obj is None:
+            obj = TelegramChat(chat_id=chat.id)
+            db.session.add(obj)
+    elif chat.type == 'channel':
+        obj = db.session.query(TelegramChannel).where(TelegramChannel.channel_id == chat.id).one_or_none()
+        if obj is None:
+            obj = TelegramChannel(channel_id=chat.id)
+            db.session.add(obj)
+
+    obj.last_active_ts = datetime.now(UTC)
+    db.session.commit()
+
 @router.post('')
 async def telegram_webhook(request: Request):
     """Принимает любой POST запрос от Telegram"""
@@ -35,22 +52,7 @@ async def telegram_webhook(request: Request):
     update = Update.de_json(data=request_data, bot=application.bot)
     add_msg = create_task(application.update_queue.put(update))
     try:
-        chat = update.effective_chat
-        obj = None
-        if chat.type in ['group', 'supergroup']:
-            obj = db.session.query(TelegramChat).where(TelegramChat.chat_id == chat.id).one_or_none()
-            if obj is None:
-                obj = TelegramChat(chat_id=chat.id)
-                db.session.add(obj)
-        elif chat.type == 'channel':
-            obj = db.session.query(TelegramChannel).where(TelegramChannel.channel_id == chat.id).one_or_none()
-            if obj is None:
-                obj = TelegramChannel(channel_id=chat.id)
-                db.session.add(obj)
-
-        obj.last_active_ts = datetime.now(UTC)
-        db.session.commit()
-        logger.debug(obj)
+        create_group(update)
     except Exception as exc:
         logger.exception(exc)
     finally:
