@@ -17,4 +17,4 @@ class CreateGroupRequest(Base):
     create_ts: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC))
     valid_ts: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC) + timedelta(days=1))
 
-    mapped_group: Mapped[Group] = relationship("group")
+    mapped_group: Mapped[Group | None] = relationship(Group)

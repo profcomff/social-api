@@ -12,6 +12,7 @@ from .discord import router as discord_router
 from .github import router as github_router
 from .telegram import router as telegram_router
 from .vk import router as vk_router
+from .group import router as group_router
 
 
 settings = get_settings()
@@ -56,6 +57,7 @@ app.add_middleware(
 )
 
 
+app.include_router(group_router)
 app.include_router(github_router)
 app.include_router(telegram_router)
 app.include_router(vk_router)

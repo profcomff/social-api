@@ -1,8 +1,12 @@
+import logging
 from datetime import UTC, datetime
 from social.models import TelegramChannel, TelegramChat, CreateGroupRequest
 
 from fastapi_sqlalchemy import db
 from telegram import Update
+
+
+logger = logging.getLogger(__name__)
 
 
 def create_telegram_group(update: Update):
@@ -28,11 +32,14 @@ def create_telegram_group(update: Update):
 
 
 def approve_telegram_group(update: Update):
+    logger.debug("Validation started")
     group = create_telegram_group(update)
     text = update.effective_message.text
     if not text or not group:
+        logger.error("Telegram group not validated (secret=%s, group=%s)", text, group)
         return
     text = text.removeprefix('/validate').removeprefix('@ViribusSocialBot').strip()
     db.session.query(CreateGroupRequest).where(CreateGroupRequest.secret_key == text).update(
         {CreateGroupRequest.mapped_group_id: group.id}
     )
+    logger.info("Telegram group %d validated (secret=%s)", group.id, text)

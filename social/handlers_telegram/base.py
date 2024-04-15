@@ -2,6 +2,7 @@ import logging
 from functools import lru_cache
 from textwrap import dedent
 
+from fastapi_sqlalchemy import db
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
@@ -25,7 +26,7 @@ def get_application():
     logger.info("Telegram API initialized successfully")
     # Общие хэндлеры
     app.add_handler(CommandHandler(callback=send_help, command="help"))
-    app.add_handler(CommandHandler(callback=get_validate, command="validate"))
+    app.add_handler(CommandHandler(callback=validate_group, command="validate", has_args=1))
 
     # Хэндлеры конкретных чатов
     register_handlers(app)
@@ -47,7 +48,9 @@ async def send_help(update: Update, context: CustomContext):
     )
 
 
-async def get_validate(update: Update, context: CustomContext):
-    approve_telegram_group(update)
+async def validate_group(update: Update, context: CustomContext):
+    logger.info("Validation message received")
+    with db():
+        approve_telegram_group(update)
     res = await update.effective_message.delete()
     logger.info(f"Validation message handled, delete status = {res}")

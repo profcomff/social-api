@@ -23,7 +23,7 @@ class GroupRequestGet(BaseModel):
 
 
 class GroupGet(BaseModel):
-    group_id: int
+    id: int
 
 
 @router.post('')
@@ -46,10 +46,10 @@ def validate_group_request(
         .where(CreateGroupRequest.secret_key == secret_key, CreateGroupRequest.owner_id == user.get("id"))
         .one_or_none()
     )
-    if obj is None or obj.valid_ts < datetime.now(UTC):
+    if obj is None or obj.valid_ts.replace(tzinfo=UTC) < datetime.now(UTC):
         raise GroupRequestNotFound(user_id=user.get("id"), secret_key=secret_key)
 
     if obj.mapped_group_id is not None:
-        return GroupGet.model_validate(obj.mapped_group)
+        return GroupGet.model_validate(obj.mapped_group, from_attributes=True)
 
-    return GroupRequestGet.model_validate(obj)
+    return GroupRequestGet.model_validate(obj, from_attributes=True)
