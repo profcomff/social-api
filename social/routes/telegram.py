@@ -1,5 +1,4 @@
 import logging
-from asyncio import create_task
 
 from fastapi import APIRouter, Request
 from fastapi_sqlalchemy import db

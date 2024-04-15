@@ -1,7 +1,9 @@
 from fastapi import Request
 from fastapi.responses import JSONResponse
-from .base import app
+
 from social.exceptions import GroupRequestNotFound
+
+from .base import app
 
 
 @app.exception_handler(GroupRequestNotFound)

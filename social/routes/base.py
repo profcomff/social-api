@@ -10,9 +10,9 @@ from social.settings import get_settings
 
 from .discord import router as discord_router
 from .github import router as github_router
+from .group import router as group_router
 from .telegram import router as telegram_router
 from .vk import router as vk_router
-from .group import router as group_router
 
 
 settings = get_settings()

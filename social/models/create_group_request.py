@@ -3,9 +3,10 @@ from datetime import UTC, datetime, timedelta
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from social.utils.string import random_string
+
 from .base import Base
 from .group import Group
-from social.utils.string import random_string
 
 
 class CreateGroupRequest(Base):

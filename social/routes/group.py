@@ -2,14 +2,13 @@ import logging
 from datetime import UTC, datetime
 
 from auth_lib.fastapi import UnionAuth
-from fastapi import APIRouter, Depends, Request
-from fastapi.responses import PlainTextResponse
+from fastapi import APIRouter, Depends
 from fastapi_sqlalchemy import db
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 
 from social.exceptions import GroupRequestNotFound
-from social.settings import get_settings
 from social.models.create_group_request import CreateGroupRequest
+from social.settings import get_settings
 
 
 router = APIRouter(prefix="/group", tags=['User defined groups'])

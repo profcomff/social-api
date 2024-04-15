@@ -1,9 +1,10 @@
 import logging
 from datetime import UTC, datetime
-from social.models import TelegramChannel, TelegramChat, CreateGroupRequest
 
 from fastapi_sqlalchemy import db
 from telegram import Update
+
+from social.models import CreateGroupRequest, TelegramChannel, TelegramChat
 
 
 logger = logging.getLogger(__name__)
