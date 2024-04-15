@@ -17,6 +17,8 @@ settings = get_settings()
 
 @lru_cache()
 def get_application():
+    if not settings.TELEGRAM_BOT_TOKEN:
+        return None
     context_types = ContextTypes(context=CustomContext)
     app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).updater(None).context_types(context_types).build()
     logger.info("Telegram API initialized successfully")

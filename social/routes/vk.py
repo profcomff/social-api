@@ -1,4 +1,5 @@
 import logging
+from datetime import UTC, datetime
 
 from auth_lib.fastapi import UnionAuth
 from fastapi import APIRouter, Depends, Request
@@ -7,7 +8,7 @@ from fastapi_sqlalchemy import db
 from pydantic import BaseModel, ConfigDict
 
 from social.handlers_telegram import get_application
-from social.models.vk import VkGroups
+from social.models.group import VkChat, VkGroup
 from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.settings import get_settings
 from social.utils.string import random_string
@@ -37,7 +38,7 @@ async def vk_webhook(request: Request) -> str:
     request_data = await request.json()
     logger.debug(request_data)
     group_id = request_data["group_id"]  # Fail if no group
-    group = db.session.query(VkGroups).where(VkGroups.group_id == group_id).one()  # Fail if no settings
+    group = db.session.query(VkGroup).where(VkGroup.group_id == group_id).one()  # Fail if no settings
 
     # Проверка на создание нового вебхука со страничка ВК
     if request_data.get("type", "") == "confirmation":
@@ -54,6 +55,27 @@ async def vk_webhook(request: Request) -> str:
     )
     db.session.commit()
 
+    if request_data.get("type") == "message_new":
+        # Получение сообщения в чате ВК
+        try:
+            peer_id = request_data["object"]["message"]["peer_id"]
+            obj = db.session.query(VkChat).where(VkChat.peer_id == peer_id).one_or_none()
+            if obj is None:
+                # Надо будет добавлять название группы
+                # conversation = requests.post("https://api.vk.com/method/messages.getConversationsById", json={
+                #     "peer_ids": peer_id,
+                #     "group_id": 222099060,
+                #     "access_token": settings.VK_BOT_TOKEN,
+                #     "v": 5.199,
+                # })
+                # chat_title = conversation["response"]["items"][0]["chat_settings"]["title"]
+                obj = VkChat(chat_id=peer_id)
+                db.session.add(obj)
+            obj.last_active_ts = datetime.now(UTC)
+            db.session.commit()
+        except Exception as exc:
+            logger.exception(exc)
+
     return PlainTextResponse('ok')
 
 
@@ -61,9 +83,9 @@ async def vk_webhook(request: Request) -> str:
 def create_or_replace_group(
     group_id: int, group_info: VkGroupCreate, _=Depends(UnionAuth(["social.vk_group.create"]))
 ) -> VkGroupCreateResponse:
-    group = db.session.query(VkGroups).where(VkGroups.group_id == group_id).one_or_none()
+    group = db.session.query(VkGroup).where(VkGroup.group_id == group_id).one_or_none()
     if group is None:
-        group = VkGroups()
+        group = VkGroup()
         db.session.add(group)
         group.group_id = group_id
         group.secret_key = random_string(32)

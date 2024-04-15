@@ -1,5 +1,6 @@
 import logging
 from collections.abc import Callable
+
 from social.utils.events import EventProcessor
 
 

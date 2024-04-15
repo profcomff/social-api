@@ -5,6 +5,12 @@ format: configure
 	source ./venv/bin/activate && autoflake -r --in-place --remove-all-unused-imports ./social
 	source ./venv/bin/activate && isort ./social
 	source ./venv/bin/activate && black ./social
+	source ./venv/bin/activate && autoflake -r --in-place --remove-all-unused-imports ./tests
+	source ./venv/bin/activate && isort ./tests
+	source ./venv/bin/activate && black ./tests
+	source ./venv/bin/activate && autoflake -r --in-place --remove-all-unused-imports ./migrations
+	source ./venv/bin/activate && isort ./migrations
+	source ./venv/bin/activate && black ./migrations
 
 configure: venv
 	source ./venv/bin/activate && pip install -r requirements.dev.txt -r requirements.txt
