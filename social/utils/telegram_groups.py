@@ -40,7 +40,8 @@ def approve_telegram_group(update: Update):
         logger.error("Telegram group not validated (secret=%s, group=%s)", text, group)
         return
     text = text.removeprefix('/validate').removeprefix('@ViribusSocialBot').strip()
-    db.session.query(CreateGroupRequest).where(CreateGroupRequest.secret_key == text).update(
-        {CreateGroupRequest.mapped_group_id: group.id}
-    )
+    request = db.session.query(CreateGroupRequest).where(CreateGroupRequest.secret_key == text).one_or_none()
+    request.mapped_group_id=group.id
+    group.owner_id = request.owner_id
+    db.session.commit()
     logger.info("Telegram group %d validated (secret=%s)", group.id, text)
