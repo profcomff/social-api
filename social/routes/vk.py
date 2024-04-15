@@ -7,7 +7,6 @@ from fastapi.responses import PlainTextResponse
 from fastapi_sqlalchemy import db
 from pydantic import BaseModel, ConfigDict
 
-from social.handlers_telegram import get_application
 from social.models.group import VkChat, VkGroup
 from social.models.webhook_storage import WebhookStorage, WebhookSystems
 from social.settings import get_settings
@@ -17,7 +16,6 @@ from social.utils.string import random_string
 router = APIRouter(prefix="/vk", tags=['vk'])
 settings = get_settings()
 logger = logging.getLogger(__name__)
-application = get_application()
 
 
 class VkGroupCreate(BaseModel):
@@ -81,7 +79,8 @@ async def vk_webhook(request: Request) -> str:
 
 @router.put('/{group_id}')
 def create_or_replace_group(
-    group_id: int, group_info: VkGroupCreate,
+    group_id: int,
+    group_info: VkGroupCreate,
     user: dict[str] = Depends(UnionAuth(["social.group.create"])),
 ) -> VkGroupCreateResponse:
     group = db.session.query(VkGroup).where(VkGroup.group_id == group_id).one_or_none()
