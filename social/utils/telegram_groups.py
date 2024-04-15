@@ -36,7 +36,7 @@ def approve_telegram_group(update: Update):
     logger.debug("Validation started")
     group = create_telegram_group(update)
     text = update.effective_message.text
-    if not text or not group:
+    if not text or not group or group.owner_id is not None:
         logger.error("Telegram group not validated (secret=%s, group=%s)", text, group)
         return
     text = text.removeprefix('/validate').removeprefix('@ViribusSocialBot').strip()
