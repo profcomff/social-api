@@ -81,11 +81,13 @@ async def vk_webhook(request: Request) -> str:
 
 @router.put('/{group_id}')
 def create_or_replace_group(
-    group_id: int, group_info: VkGroupCreate, _=Depends(UnionAuth(["social.vk_group.create"]))
+    group_id: int, group_info: VkGroupCreate,
+    user: dict[str] = Depends(UnionAuth(["social.group.create"])),
 ) -> VkGroupCreateResponse:
     group = db.session.query(VkGroup).where(VkGroup.group_id == group_id).one_or_none()
     if group is None:
         group = VkGroup()
+        group.owner_id = user.get("id")
         db.session.add(group)
         group.group_id = group_id
         group.secret_key = random_string(32)
