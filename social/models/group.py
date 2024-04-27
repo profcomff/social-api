@@ -12,7 +12,7 @@ class Group(Base):
     owner_id: Mapped[int | None]
 
     is_deleted: Mapped[bool] = mapped_column(default=False)
-    last_active_ts: Mapped[datetime]
+    last_active_ts: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC))
 
     create_ts: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC))
     update_ts: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC))

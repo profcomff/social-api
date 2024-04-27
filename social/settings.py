@@ -20,6 +20,7 @@ class Settings(BaseSettings):
 
     TELEGRAM_BOT_TOKEN: str | None = None
 
+    VK_BOT_GROUP_ID: int | None = None
     VK_BOT_TOKEN: str | None = None
 
     GITHUB_APP_ID: int | None = None

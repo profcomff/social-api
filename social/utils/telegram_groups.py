@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def create_telegram_group(update: Update):
+    """Создает запись о телеграмм группе в внутренней БД приложения или возвращает существующий"""
     chat = update.effective_chat
     obj = None
     if chat.type in ['group', 'supergroup']:
@@ -33,6 +34,7 @@ def create_telegram_group(update: Update):
 
 
 def approve_telegram_group(update: Update):
+    """Если получено сообщение команды /validate, то за группой закрепляется владелец"""
     logger.debug("Validation started")
     group = create_telegram_group(update)
     text = update.effective_message.text
@@ -41,7 +43,7 @@ def approve_telegram_group(update: Update):
         return
     text = text.removeprefix('/validate').removeprefix('@ViribusSocialBot').strip()
     request = db.session.query(CreateGroupRequest).where(CreateGroupRequest.secret_key == text).one_or_none()
-    request.mapped_group_id=group.id
+    request.mapped_group_id = group.id
     group.owner_id = request.owner_id
     db.session.commit()
     logger.info("Telegram group %d validated (secret=%s)", group.id, text)
