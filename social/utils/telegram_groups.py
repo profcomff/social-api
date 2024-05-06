@@ -14,10 +14,15 @@ settings = get_settings()
 
 
 def get_chat_info(id: int) -> dict:
-    return requests.post(
+    resp = requests.post(
         f'https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/getChat',
         json={'chat_id': id},
-    ).json()
+    )
+    if not resp.ok:
+        logger.error(resp.text)
+        return {}
+    else:
+        return resp.json()
 
 
 def create_telegram_group(update: Update):
@@ -59,8 +64,14 @@ def approve_telegram_group(update: Update):
     logger.info("Telegram group %d validated (secret=%s)", group.id, text)
 
 
-def update_tg_chat(group: TelegramChat):
-    chat_info = get_chat_info(group.chat_id)
+def update_tg_chat(group: TelegramChat | TelegramChannel):
+    if isinstance(group, TelegramChat):
+        chat_info = get_chat_info(group.chat_id)
+    elif isinstance(group, TelegramChannel):
+        chat_info = get_chat_info(group.channel_id)
+    else:
+        raise TypeError("Only TelegramChat and TelegramChannel are supported")
+    logger.info("TG chat info: %s", chat_info)
     group.name = chat_info.get("title")
     group.description = chat_info.get("description")
     group.invite_link = chat_info.get("invite_link")

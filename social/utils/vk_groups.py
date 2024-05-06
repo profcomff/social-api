@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 settings = get_settings()
 
 
-def get_chat_info(peer_id):
+def get_chat_info(peer_id) -> dict:
     """Получить название чата ВК"""
     conversation = requests.post(
         "https://api.vk.com/method/messages.getConversationsById",
@@ -87,7 +87,9 @@ def approve_vk_chat(request_data: dict[str]):
 def update_vk_chat(group: VkChat):
     """Обновляет информацию о группе ВК"""
     chat_info = get_chat_info(group.peer_id)
+    chat_invite = get_chat_invite_link(group.peer_id)
+    logger.info("Chat info: %s, invite: %s", chat_info, chat_invite)
     group.name = chat_info.get("title")
     group.description = chat_info.get("description")
-    group.invite_link = get_chat_invite_link(group.peer_id)
+    group.invite_link = chat_invite
     return group
