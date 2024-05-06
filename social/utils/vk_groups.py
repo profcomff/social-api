@@ -24,7 +24,7 @@ def get_chat_info(peer_id) -> dict:
         },
     )
     try:
-        return conversation["response"]["items"][0]["chat_settings"]
+        return conversation.json()["response"]["items"][0]["chat_settings"]
     except Exception as exc:
         logger.exception(exc)
         return None
@@ -42,7 +42,7 @@ def get_chat_invite_link(peer_id):
         },
     )
     try:
-        return conversation["response"]["link"]
+        return conversation.json()["response"]["link"]
     except Exception as exc:
         logger.exception(exc)
         return None

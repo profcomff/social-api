@@ -22,7 +22,7 @@ def get_chat_info(id: int) -> dict:
         logger.error(resp.text)
         return {}
     else:
-        return resp.json()
+        return resp.json().get("result", {})
 
 
 def create_telegram_group(update: Update):
