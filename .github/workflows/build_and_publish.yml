@@ -131,8 +131,8 @@ jobs:
             --env DB_DSN='${{ secrets.DB_DSN }}' \
             --env AUTH_URL='https://api.profcomff.com/auth' \
             --env TELEGRAM_BOT_TOKEN='${{ secrets.TELEGRAM_BOT_TOKEN }}' \
-            --env VK_BOT_GROUP_ID='{{ secrets.VK_BOT_GROUP_ID }}' \
-            --env VK_BOT_TOKEN='{{ secrets.VK_BOT_TOKEN }}' \
+            --env VK_BOT_GROUP_ID='${{ secrets.VK_BOT_GROUP_ID }}' \
+            --env VK_BOT_TOKEN='${{ secrets.VK_BOT_TOKEN }}' \
             --env GITHUB_APP_ID='${{ secrets.GH_APP_ID }}' \
             --env GITHUB_PRIVATE_KEY='${{ secrets.GH_PRIVATE_KEY }}' \
             --env DISCORD_PUBLIC_KEY='${{ secrets.DISCORD_PUBLIC_KEY }}' \
