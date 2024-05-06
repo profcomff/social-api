@@ -11,7 +11,7 @@ from social.models.create_group_request import CreateGroupRequest
 from social.models.group import Group
 from social.settings import get_settings
 from social.utils.telegram_groups import update_tg_chat
-from social.utils.vk_groups import update_vk_chat
+from social.utils.vk_groups import update_vk_chat, update_vk_group
 
 
 router = APIRouter(prefix="/group", tags=['User defined groups'])
@@ -28,6 +28,7 @@ class GroupGet(BaseModel):
     id: int
     owner_id: int | None = None
     name: str | None = None
+    type: str | None = None
     description: str | None = None
     invite_link: str | None = None
 
@@ -119,6 +120,8 @@ def update_group_info(
     if patch_info.update_from_source:
         if group.type == "vk_chat":
             update_vk_chat(group)
+        elif group.type == "vk_group":
+            update_vk_group(group)
         elif group.type == "tg_chat" or group.type == "tg_channel":
             update_tg_chat(group)
 
