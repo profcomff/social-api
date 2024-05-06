@@ -9,3 +9,12 @@ class GroupRequestNotFound(SocialApiError):
         self.user_id = user_id
         self.secret_key = secret_key
         super().__init__(*args)
+
+
+class GroupNotFound(SocialApiError):
+    """Запрошенная группа не найдена"""
+
+    def __init__(self, user_id: int | None, group_id: int, *args) -> None:
+        self.user_id = user_id
+        self.group_id = group_id
+        super().__init__(*args)

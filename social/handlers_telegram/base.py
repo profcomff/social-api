@@ -49,6 +49,7 @@ async def send_help(update: Update, context: CustomContext):
 
 
 async def validate_group(update: Update, context: CustomContext):
+    """Если получено сообщение команды /validate, то за группой закрепляется владелец"""
     logger.info("Validation message received")
     with db():
         approve_telegram_group(update)

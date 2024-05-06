@@ -32,4 +32,5 @@ def process_event(event: dict):
     object=lambda i: i.get("message", {}).get("text", "").startswith("/validate"),
 )
 def validate_group(event: dict):
+    """Если получено сообщение команды /validate, то за группой закрепляется владелец"""
     approve_vk_chat(event)

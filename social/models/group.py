@@ -11,6 +11,11 @@ class Group(Base):
     type: Mapped[str]
     owner_id: Mapped[int | None]
 
+    name: Mapped[str | None]
+    description: Mapped[str | None]
+    invite_link: Mapped[str | None]
+    hidden: Mapped[bool] = mapped_column(default=True)
+
     is_deleted: Mapped[bool] = mapped_column(default=False)
     last_active_ts: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC))
 
