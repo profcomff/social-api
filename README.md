@@ -2,6 +2,8 @@
 
 Бот для выдачи печенек за активности
 
+[<img src="https://cdn.profcomff.com/easycode/easycode.svg" width="200"></img>](https://easycode.profcomff.com/templates/docker-fastapi/workspace?mode=manual&param.Repository+URL=https://github.com/profcomff/social-api.git&param.Working+directory=social-api)
+
 ## Запуск
 
 1) Перейдите в папку проекта
