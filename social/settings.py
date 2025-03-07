@@ -19,9 +19,11 @@ class Settings(BaseSettings):
     CORS_ALLOW_HEADERS: list[str] = ['*']
 
     TELEGRAM_BOT_TOKEN: str | None = None
+    TELEGRAM_TARGET_CHANNEL_ID: int | None = None  # ID канала Telegram для пересылки постов
 
     VK_BOT_GROUP_ID: int | None = None
     VK_BOT_TOKEN: str | None = None
+    VK_MONITORED_GROUP_ID: int | None = None  # ID группы ВК для мониторинга
 
     GITHUB_APP_ID: int | None = None
     GITHUB_WEBHOOK_SECRET: str | None = None
