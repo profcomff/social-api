@@ -26,7 +26,6 @@ CHAT_ID = -1001758480664
 MAIN_TOPIC_ID = 55106
 
 
-
 def register_handlers(app: Application):
     app.add_handler(CommandHandler(filters=Chat(CHAT_ID), callback=change_slug, command="slug"))
     app.add_handler(MessageHandler(filters=Chat(CHAT_ID), callback=delete_system_message))
