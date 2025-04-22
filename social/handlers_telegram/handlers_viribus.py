@@ -25,48 +25,6 @@ settings = get_settings()
 CHAT_ID = -1001758480664
 MAIN_TOPIC_ID = 55106
 
-GREETINGS = [
-    """
-    Привет, [{name}](tg://user?id={id}), и добро пожаловать в наш клуб!
-
-    Расскажи, что привело тебя к нам и откуда о нас узнал(а)?
-    """,
-    """
-    Здравствуй, [{name}](tg://user?id={id}). Добро пожаловать в Viribus unitis!
-
-    Как ты о нас узнал(а)? Расскажи о своем опыте в IT.
-    """,
-    """
-    Всем привет! У нас новый участник, давайте приветствовать [{name}](tg://user?id={id}). 
-    
-    Чем увлекаешься в IT, и как нашел(ла) наш чат?
-    """,
-    """
-    Приветствуем на борту, [{name}](tg://user?id={id})!
-
-    Мы всегда рады новым идеям и опыту. Поделись, пожалуйста, своим путем в IT и каким образом ты нас нашел(ла)?
-    """,
-    """
-    Салют, [{name}](tg://user?id={id})! Приветствуем тебя в нашем уютном IT уголке!
-
-    Какие направления IT тебе интересны и где ты услышал(а) о нас?
-    """,
-    """
-    Приветик, [{name}](tg://user?id={id})! Добро пожаловать в наш IT клуб!
-
-    Мы здесь, чтобы обучаться и делиться опытом. Расскажи нам немного о своем опыте и как ты нас нашел(ла)?
-    """,
-    """
-    Привет, [{name}](tg://user?id={id})! Добро пожаловать в наше IT сообщество!
-
-    Что заинтересовало тебя в нашем клубе и где узнал(а) о нас?
-    """,
-    """
-    Приятно познакомиться, [{name}](tg://user?id={id})! Мы здесь, чтобы обсуждать всё, что связано с IT.
-
-    Какие темы в IT тебя больше всего интересуют и где ты узнал(а) о нас?
-    """,
-]
 
 
 def register_handlers(app: Application):
@@ -76,16 +34,7 @@ def register_handlers(app: Application):
 
 
 async def delete_system_message(update: Update, context: CustomContext):
-    """Удаляет сообщения в сервисном канале и отправляет приветственные сообщения"""
-    for user in update.effective_message.new_chat_members:
-        await context.bot.send_message(
-            chat_id=CHAT_ID,
-            message_thread_id=MAIN_TOPIC_ID,
-            text=dedent(choice(GREETINGS)).format(name=user.name, id=user.id),
-            parse_mode='markdown',
-        )
-        logger.info(f"User {user.name} greeting sent")
-
+    """Удаляет сообщения в сервисном канале"""
     if update.effective_message.message_thread_id is None and not update.effective_user.is_bot:
         res = await update.effective_message.delete()
         logger.info(f"Non-bot message to general channel handled, delete status = {res}")
